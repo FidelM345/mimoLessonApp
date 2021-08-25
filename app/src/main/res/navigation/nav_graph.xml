@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/lessonListFragment">
+
+    <fragment
+        android:id="@+id/lessonListFragment"
+        android:name="com.example.mimoapp.showLessonList.LessonListFragment"
+        android:label="fragment_lesson_list"
+        tools:layout="@layout/fragment_lesson_list" >
+        <action
+            android:id="@+id/action_lessonListFragment_to_singleLessonFragment"
+            app:destination="@id/singleLessonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleLessonFragment"
+        android:name="com.example.mimoapp.showSingleLesson.SingleLessonFragment"
+        android:label="fragment_single_lesson"
+        tools:layout="@layout/fragment_single_lesson" >
+        <action
+            app:popUpTo="@+id/lessonListFragment"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_singleLessonFragment_to_lessonListFragment"
+            app:destination="@id/lessonListFragment" />
+        <argument
+            android:name="singleLessonDetailsArgs"
+            app:argType="com.example.mimoapp.api.model.Lesson" />
+    </fragment>
+</navigation>

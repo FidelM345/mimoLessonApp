@@ -1,0 +1,114 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+
+    //hilt plugins
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin' //makes use of the safe args gradle plugin
+}
+
+
+android {
+    compileSdk 30
+
+    defaultConfig {
+        applicationId "com.example.mimoapp"
+        minSdk 22
+        targetSdk 30
+        versionCode 1
+        versionName "1.0"
+
+    /*    javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }*/
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //prevents META-INF/AL2.0 file from being added again already included in kotlin co-routine
+        configurations.all {
+            resolutionStrategy {
+                exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+
+            }
+        }
+    }
+
+    kapt {
+        javacOptions {
+            // These options are normally set automatically via the Hilt Gradle plugin, but we
+            // set them manually to workaround a bug in the Kotlin 1.5.20
+            option("-Adagger.fastInit=ENABLED")
+            option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+        }
+    }
+
+    buildFeatures {
+        //enable view binding
+        viewBinding = true
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+
+
+}
+
+dependencies {
+    //To get the dependencies go to projectview in the project panel, and to the folder called buildSystem
+    //there is a file called project_dependencies.gradle
+    implementation(defaultDefaultDependencies.values())
+    //navigation component
+    implementation(navigationComponent.values())
+    //password validation library
+    implementation(otherLibraries.formValidation)
+
+    //dependency for dagger hilt
+    implementation(daggerHilt.hilt)
+    kapt(daggerHilt.compiler)
+
+    //coroutines library
+    implementation(coroutineDependencies.values())
+    //live data, view model and life cycle libraries
+    implementation(liveDataViewModelLifeCycle.values())
+
+    //kotlin room database
+    //implementation(roomDatabase.runtime)
+    implementation(roomDatabase.ktx)
+    kapt(roomDatabase.compiler)
+
+    //retrofit DB
+    implementation(retrofit)
+
+    //for testing responses from api
+    implementation(otherLibraries.idling_resource)
+
+    //instrumentation and unit tests
+    androidTestImplementation(defaultInstrunmentationTestDependencies.values())
+    androidTestImplementation(mockitoLibrary.android)//mockito library
+    androidTestImplementation(daggerHilt.hiltTest)//instrumented tests. using hilt
+    kaptAndroidTest(daggerHilt.compiler)
+    debugImplementation(otherLibraries.fragment_test)//used for testing fragments
+
+    testImplementation(otherLibraries.junit4)//junit
+    testImplementation(roomDatabase.testing)//room test helpers
+    testImplementation(liveDataViewModelLifeCycle.liveDataTestHelper)//livedata test helper
+    testImplementation(mockitoLibrary.kotlin) //mockitolibrary
+    testImplementation(mockitoLibrary.inline)  //used to test kotlin final classes
+    testImplementation(coroutineDependencies.test)//for testing coroutines
+}

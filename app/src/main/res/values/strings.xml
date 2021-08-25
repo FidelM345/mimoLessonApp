@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MimoApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="quiz_slider_fragment">I am the Pager Fragment</string>
+    <string name="lesson_solved_message">Lesson has been Solved</string>
+</resources>
